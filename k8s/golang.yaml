@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-deployment
+  namespace: trial
+  labels:
+    app: golang
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: golang
+  template:
+    metadata:
+      labels:
+        app: golang
+    spec:
+      containers:
+        - name: golang-container
+          image: 019496914213.dkr.ecr.eu-north-1.amazonaws.com/trial/golang:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: golang-service
+  namespace: trial
+spec:
+  type: LoadBalancer
+  selector:
+    app: golang
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
